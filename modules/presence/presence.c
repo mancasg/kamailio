@@ -145,6 +145,7 @@ char prefix='a';
 int startup_time=0;
 str db_url = {0, 0};
 int expires_offset = 0;
+int subscribe_expires_offset = 0;
 uint32_t min_expires= 0;
 int min_expires_action= 1;
 uint32_t max_expires= 3600;
@@ -194,37 +195,38 @@ static cmd_export_t cmds[]=
 };
 
 static param_export_t params[]={
-	{ "db_url",                 PARAM_STR, &db_url},
-	{ "presentity_table",       PARAM_STR, &presentity_table},
-	{ "active_watchers_table",  PARAM_STR, &active_watchers_table},
-	{ "watchers_table",         PARAM_STR, &watchers_table},
-	{ "clean_period",           INT_PARAM, &clean_period },
-	{ "db_update_period",       INT_PARAM, &db_update_period },
-	{ "waitn_time",             INT_PARAM, &pres_waitn_time },
-	{ "notifier_poll_rate",     INT_PARAM, &pres_notifier_poll_rate },
-	{ "notifier_processes",     INT_PARAM, &pres_notifier_processes },
-	{ "force_delete",           INT_PARAM, &pres_force_delete },
-	{ "to_tag_pref",            PARAM_STRING, &to_tag_pref },
-	{ "expires_offset",         INT_PARAM, &expires_offset },
-	{ "max_expires",            INT_PARAM, &max_expires },
-	{ "min_expires",            INT_PARAM, &min_expires },
-	{ "min_expires_action",     INT_PARAM, &min_expires_action },
-	{ "server_address",         PARAM_STR, &server_address},
-	{ "subs_htable_size",       INT_PARAM, &shtable_size},
-	{ "pres_htable_size",       INT_PARAM, &phtable_size},
-	{ "subs_db_mode",           INT_PARAM, &subs_dbmode},
-	{ "publ_cache",             INT_PARAM, &publ_cache_enabled},
-	{ "enable_sphere_check",    INT_PARAM, &sphere_enable},
-	{ "timeout_rm_subs",        INT_PARAM, &timeout_rm_subs},
-	{ "send_fast_notify",       INT_PARAM, &send_fast_notify},
-	{ "fetch_rows",             INT_PARAM, &pres_fetch_rows},
-	{ "db_table_lock_type",     INT_PARAM, &db_table_lock_type},
-	{ "local_log_level",        PARAM_INT, &pres_local_log_level},
-	{ "local_log_facility",     PARAM_STR, &pres_log_facility_str},
-	{ "subs_remove_match",      PARAM_INT, &pres_subs_remove_match},
-	{ "xavp_cfg",               PARAM_STR, &pres_xavp_cfg},
-	{ "retrieve_order",         PARAM_INT, &pres_retrieve_order},
-	{ "sip_uri_match",          PARAM_INT, &pres_uri_match},
+	{ "db_url",                   PARAM_STR, &db_url},
+	{ "presentity_table",         PARAM_STR, &presentity_table},
+	{ "active_watchers_table",    PARAM_STR, &active_watchers_table},
+	{ "watchers_table",           PARAM_STR, &watchers_table},
+	{ "clean_period",             INT_PARAM, &clean_period },
+	{ "db_update_period",         INT_PARAM, &db_update_period },
+	{ "waitn_time",               INT_PARAM, &pres_waitn_time },
+	{ "notifier_poll_rate",       INT_PARAM, &pres_notifier_poll_rate },
+	{ "notifier_processes",       INT_PARAM, &pres_notifier_processes },
+	{ "force_delete",             INT_PARAM, &pres_force_delete },
+	{ "to_tag_pref",              PARAM_STRING, &to_tag_pref },
+	{ "expires_offset",           INT_PARAM, &expires_offset },
+	{ "subscribe_expires_offset", INT_PARAM, &subscribe_expires_offset },
+	{ "max_expires",              INT_PARAM, &max_expires },
+	{ "min_expires",              INT_PARAM, &min_expires },
+	{ "min_expires_action",       INT_PARAM, &min_expires_action },
+	{ "server_address",           PARAM_STR, &server_address},
+	{ "subs_htable_size",         INT_PARAM, &shtable_size},
+	{ "pres_htable_size",         INT_PARAM, &phtable_size},
+	{ "subs_db_mode",             INT_PARAM, &subs_dbmode},
+	{ "publ_cache",               INT_PARAM, &publ_cache_enabled},
+	{ "enable_sphere_check",      INT_PARAM, &sphere_enable},
+	{ "timeout_rm_subs",          INT_PARAM, &timeout_rm_subs},
+	{ "send_fast_notify",         INT_PARAM, &send_fast_notify},
+	{ "fetch_rows",               INT_PARAM, &pres_fetch_rows},
+	{ "db_table_lock_type",       INT_PARAM, &db_table_lock_type},
+	{ "local_log_level",          PARAM_INT, &pres_local_log_level},
+	{ "local_log_facility",       PARAM_STR, &pres_log_facility_str},
+	{ "subs_remove_match",        PARAM_INT, &pres_subs_remove_match},
+	{ "xavp_cfg",                 PARAM_STR, &pres_xavp_cfg},
+	{ "retrieve_order",           PARAM_INT, &pres_retrieve_order},
+	{ "sip_uri_match",            PARAM_INT, &pres_uri_match},
 	{0,0,0}
 };
 
@@ -297,6 +299,9 @@ static int mod_init(void)
 
 	if(expires_offset<0)
 		expires_offset = 0;
+
+	if(subscribe_expires_offset<0)
+		subscribe_expires_offset = 0;
 
 	if(to_tag_pref==NULL || strlen(to_tag_pref)==0)
 		to_tag_pref="10";

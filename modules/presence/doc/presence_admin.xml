@@ -341,6 +341,26 @@ modparam("presence", "expires_offset", 10)
 		</example>
 
 </section>
+
+	<section id="presence.p.subscribe_expires_offset">
+		<title><varname>subscribe_expires_offset</varname> (int)</title>
+		<para>
+		The value in seconds that should be added to the expires value of a SIP SUBSCRIBE.
+		</para>
+		<para>
+		<emphasis>Default value is <quote>0</quote>.
+		</emphasis>
+		</para>
+		<example>
+		<title>Set <varname>subscribe_expires_offset</varname> parameter</title>
+		<programlisting format="linespecific">
+...
+modparam("presence", "subscribe_expires_offset", 10)
+...
+</programlisting>
+		</example>
+
+</section>
        <section id="presence.p.max_expires">
                <title><varname>max_expires</varname> (int)</title>
                <para>
